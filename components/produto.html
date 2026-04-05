@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drogas Ilícitas — Produto</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/produto.css" />
+  </head>
+  <body>
+    <!-- TOAST -->
+    <div class="toast" id="toast">
+      <i class="fa-solid fa-circle-check"></i><span id="toastMsg"></span>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      🚚 Frete grátis em pedidos acima de R$ 50 &nbsp;·&nbsp; Sua saúde é nossa
+      prioridade!
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+      <a class="logo" href="index.html">
+        <div class="logo-icon"><i class="fa-solid fa-plus"></i></div>
+        Drogas Lícitas
+      </a>
+      <nav class="menu">
+        <a href="../index.html">Home</a>
+        <a href="index.html#products" class="active">Produtos</a>
+        <a href="index.html#categories">Categorias</a>
+        <a href="index.html#offers">Ofertas</a>
+        <a href="index.html#contact">Contato</a>
+      </nav>
+      <div class="actions">
+        <div class="search">
+          <i class="fa fa-search"></i>
+          <input
+            type="text"
+            placeholder="Buscar medicamentos..."
+            onkeydown="if (event.key === 'Enter') searchRedirect(this.value);"
+          />
+        </div>
+        <div class="nav-icon" onclick="openCart()" style="cursor: pointer">
+          <i class="fa-solid fa-cart-shopping"></i>
+          <span class="badge" id="cartBadge" style="display: none">0</span>
+        </div>
+        <a class="nav-icon" href="login01  .html"
+          ><i class="fa-regular fa-user"></i
+        ></a>
+      </div>
+    </header>
+
+    <!-- CART OVERLAY + DRAWER -->
+    <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+    <div class="cart-drawer" id="cartDrawer">
+      <div class="cart-header">
+        <div class="cart-title">
+          <i class="fa-solid fa-cart-shopping"></i> Meu Carrinho
+          <span class="cart-count" id="cartCount">0 itens</span>
+        </div>
+        <button class="cart-close" onclick="closeCart()">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-shipping">
+        <div class="ship-title">
+          <i class="fa-solid fa-truck"></i> Calcular Frete
+        </div>
+        <div class="ship-row">
+          <input
+            type="text"
+            id="cepInput"
+            maxlength="9"
+            placeholder="CEP (ex: 01310-100)"
+            oninput="fmtCEP(this)"
+          />
+          <button class="ship-btn" onclick="calcFrete()">
+            <i class="fa-solid fa-magnifying-glass"></i> Calcular
+          </button>
+        </div>
+        <div class="ship-opts" id="shipOpts" style="display: none">
+          <label class="ship-opt"
+            ><input
+              type="radio"
+              name="frete"
+              value="0"
+              checked
+              onchange="updTotal()"
+            />
+            <div class="opt-info">
+              <span class="opt-label"
+                ><i class="fa-solid fa-box"></i> PAC (Correios)</span
+              ><span class="opt-days">5–8 dias úteis</span>
+            </div>
+            <span class="opt-price free" id="pac-price">Grátis</span></label
+          >
+          <label class="ship-opt"
+            ><input
+              type="radio"
+              name="frete"
+              value="14.90"
+              onchange="updTotal()"
+            />
+            <div class="opt-info">
+              <span class="opt-label"
+                ><i class="fa-solid fa-bolt"></i> SEDEX (Correios)</span
+              ><span class="opt-days">1–3 dias úteis</span>
+            </div>
+            <span class="opt-price">R$ 14,90</span></label
+          >
+          <label class="ship-opt"
+            ><input
+              type="radio"
+              name="frete"
+              value="24.90"
+              onchange="updTotal()"
+            />
+            <div class="opt-info">
+              <span class="opt-label"
+                ><i class="fa-solid fa-truck-fast"></i> Expressa (Motoboy)</span
+              ><span class="opt-days">Mesmo dia</span>
+            </div>
+            <span class="opt-price">R$ 24,90</span></label
+          >
+        </div>
+        <div class="ship-err" id="shipErr" style="display: none">
+          <i class="fa-solid fa-circle-exclamation"></i> CEP inválido.
+        </div>
+        <div class="ship-load" id="shipLoad" style="display: none">
+          <i class="fa-solid fa-spinner fa-spin"></i> Consultando...
+        </div>
+      </div>
+      <div class="cart-summary">
+        <div class="sum-row">
+          <span>Subtotal</span><span id="subVal">R$ 0,00</span>
+        </div>
+        <div class="sum-row">
+          <span>Frete</span><span id="freteVal" class="frete-tag">—</span>
+        </div>
+        <div class="sum-row" id="discRow" style="display: none">
+          <span>Desconto</span><span id="discVal" class="disc-tag"></span>
+        </div>
+        <div class="sum-divider"></div>
+        <div class="sum-row sum-total">
+          <span>Total</span><span id="totalVal">R$ 0,00</span>
+        </div>
+        <div class="coupon-row">
+          <input
+            type="text"
+            id="couponInput"
+            placeholder="Cupom de desconto..."
+          />
+          <button onclick="applyCoupon()">Aplicar</button>
+        </div>
+        <div class="coupon-msg" id="couponMsg"></div>
+        <button class="checkout-btn" onclick="checkout()">
+          <i class="fa-solid fa-lock"></i> Finalizar Compra
+        </button>
+        <button class="keep-btn" onclick="closeCart()">
+          <i class="fa-solid fa-arrow-left"></i> Continuar Comprando
+        </button>
+      </div>
+    </div>
+
+    <!-- DYNAMIC CONTENT -->
+    <div id="pageContent"></div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-col">
+          <div class="f-logo">
+            <div class="f-logo-icon"><i class="fa-solid fa-plus"></i></div>
+            Drogas Lícitas
+          </div>
+          <p>
+            Sua farmácia moderna de confiança. Medicamentos e cuidado pessoal
+            entregues na sua porta.
+          </p>
+          <div class="social-icons">
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Links Rápidos</h4>
+          <ul>
+            <li onclick="location.href = 'index.html'">Home</li>
+            <li onclick="location.href = 'index.html'">Produtos</li>
+            <li onclick="location.href = 'index.html'">Categorias</li>
+            <li onclick="location.href = 'index.html'">Ofertas</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Atendimento</h4>
+          <ul>
+            <li>Minha Conta</li>
+            <li>Rastrear Pedido</li>
+            <li>Envio &amp; Devoluções</li>
+            <li>FAQ</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contato</h4>
+          <ul>
+            <li>Av. Paulista, 1000 — São Paulo/SP</li>
+            <li>suporte@drogaslicitas.com.br</li>
+            <li>0800 123 4567</li>
+            <li class="f-open">Aberto 24h/7 dias</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Drogas Lícitas. Todos os direitos reservados.</p>
+        <p>
+          As informações neste site são educativas e não substituem orientação
+          médica profissional.
+        </p>
+      </div>
+    </footer>
+
+    <script src="../script/produto.js"></script>
+  </body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drogas Lícitas — Entrar</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="../css/login01.css">
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><i class="fa-solid fa-circle-check"></i><span id="toastMsg"></span></div>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <a class="logo" href="../index.html">
+    <div class="logo-icon"><i class="fa-solid fa-plus"></i></div>
+    Drogas Ilícitas
+  </a>
+  <a class="nav-back" href="../index.html">
+    <i class="fa-solid fa-arrow-left"></i> Voltar ao Site
+  </a>
+</header>
+
+<!-- MAIN LAYOUT -->
+<div class="auth-wrap">
+
+  <!-- LEFT — BRAND PANEL -->
+  <div class="auth-left">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="orbit-wrap">
+      <div class="orbit-item">💊</div>
+      <div class="orbit-item" style="animation-delay:.5s">🌿</div>
+      <div class="orbit-item" style="animation-delay:1s">✨</div>
+    </div>
+
+    <div class="left-content">
+      <div class="left-tag au"><span class="left-dot"></span> Sua farmácia online de confiança</div>
+
+      <h2 class="au d1">
+        Cuide da sua <span>saúde</span><br>com facilidade
+      </h2>
+
+      <p class="au d2">
+        Crie sua conta para acessar ofertas exclusivas, rastrear pedidos e ter sua lista de medicamentos sempre à mão.
+      </p>
+
+      <div class="trust-pills">
+        <div class="trust-pill au d3">
+          <div class="trust-pill-icon">🚚</div>
+          <div>Entrega Rápida<small>Receba em casa em até 24h</small></div>
+        </div>
+        <div class="trust-pill au d4">
+          <div class="trust-pill-icon">🔒</div>
+          <div>Dados Protegidos<small>Seus dados estão seguros conosco</small></div>
+        </div>
+        <div class="trust-pill au d5">
+          <div class="trust-pill-icon">💰</div>
+          <div>Ofertas Exclusivas<small>Descontos especiais para membros</small></div>
+        </div>
+        <div class="trust-pill au d6">
+          <div class="trust-pill-icon">📋</div>
+          <div>Histórico de Pedidos<small>Acesse seus pedidos a qualquer hora</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT — FORM PANEL -->
+  <div class="auth-right">
+    <div class="auth-card">
+
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login"    onclick="switchTab('login')">Entrar</button>
+        <button class="auth-tab"        id="tab-register" onclick="switchTab('register')">Criar Conta</button>
+      </div>
+
+      <!-- ══════════════ LOGIN FORM ══════════════ -->
+      <div class="auth-form active" id="form-login">
+        <h3>Bem-vindo de volta! 👋</h3>
+        <p class="sub">Entre na sua conta para continuar comprando.</p>
+
+        <!-- Google -->
+        <button class="google-btn" onclick="loginGoogle()">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continuar com Google
+        </button>
+
+        <div class="divider">ou entre com e-mail</div>
+
+        <!-- Email -->
+        <div class="fg au d1">
+          <label>E-mail</label>
+          <div class="input-wrap">
+            <i class="fa-regular fa-envelope icon-left"></i>
+            <input type="email" id="l-email" placeholder="seu@email.com">
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="fg au d2">
+          <label>Senha</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock icon-left"></i>
+            <input type="password" id="l-pw" placeholder="Sua senha">
+            <button class="toggle-pw" type="button" onclick="togglePw('l-pw',this)"><i class="fa-regular fa-eye"></i></button>
+          </div>
+        </div>
+
+        <a href="#" class="forgot au d3" onclick="forgotPw(event)">Esqueci minha senha →</a>
+
+        <div class="check-row au d3" style="margin-bottom:20px">
+          <input type="checkbox" id="remember">
+          <label for="remember">Lembrar de mim neste dispositivo</label>
+        </div>
+
+        <button class="submit-btn au d4" onclick="doLogin()">
+          <i class="fa-solid fa-right-to-bracket"></i> Entrar na conta
+        </button>
+
+        <!-- Success -->
+        <div class="success-state" id="login-success">
+          <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <h3>Login realizado!</h3>
+          <p>Redirecionando para sua conta…</p>
+        </div>
+
+        <p style="text-align:center;margin-top:20px;font-size:13px;color:var(--muted)">
+          Não tem conta? <a href="#" style="color:var(--blue);font-weight:700" onclick="switchTab('register')">Criar conta grátis</a>
+        </p>
+      </div>
+
+      <!-- ══════════════ REGISTER FORM ══════════════ -->
+      <div class="auth-form" id="form-register">
+        <h3>Criar sua conta 🎉</h3>
+        <p class="sub">Preencha os dados abaixo e aproveite benefícios exclusivos.</p>
+
+        <!-- Google -->
+        <button class="google-btn" onclick="loginGoogle()">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Cadastrar com Google
+        </button>
+
+        <div class="divider">ou preencha o formulário</div>
+
+        <!-- ── DADOS PESSOAIS ── -->
+        <div class="section-label"><i class="fa-solid fa-user"></i> Dados Pessoais</div>
+
+        <div class="fg au d1">
+          <label>Nome Completo *</label>
+          <div class="input-wrap">
+            <i class="fa-regular fa-user icon-left"></i>
+            <input type="text" id="r-name" placeholder="Seu nome completo">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="fg au d2">
+            <label>CPF *</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-id-card icon-left"></i>
+              <input type="text" id="r-cpf" placeholder="000.000.000-00" maxlength="14" oninput="maskCPF(this)">
+            </div>
+            <span class="field-note" id="cpf-note"></span>
+          </div>
+          <div class="fg au d2">
+            <label>Data de Nascimento *</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-calendar icon-left"></i>
+              <input type="text" id="r-birth" placeholder="DD/MM/AAAA" maxlength="10" oninput="maskDate(this)">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="fg au d3">
+            <label>Telefone / WhatsApp *</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-phone icon-left"></i>
+              <input type="tel" id="r-phone" placeholder="(11) 99999-9999" maxlength="15" oninput="maskPhone(this)">
+            </div>
+          </div>
+          <div class="fg au d3">
+            <label>Gênero</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-venus-mars icon-left"></i>
+              <select id="r-gender">
+                <option value="">Selecione</option>
+                <option>Masculino</option>
+                <option>Feminino</option>
+                <option>Não-binário</option>
+                <option>Prefiro não informar</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── ACESSO ── -->
+        <div class="section-label"><i class="fa-solid fa-key"></i> Dados de Acesso</div>
+
+        <div class="fg au d1">
+          <label>E-mail *</label>
+          <div class="input-wrap">
+            <i class="fa-regular fa-envelope icon-left"></i>
+            <input type="email" id="r-email" placeholder="seu@email.com" oninput="validateEmail(this)">
+          </div>
+          <span class="field-note" id="email-note"></span>
+        </div>
+
+        <div class="fg au d2">
+          <label>Senha *</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock icon-left"></i>
+            <input type="password" id="r-pw" placeholder="Mínimo 8 caracteres" oninput="checkStrength(this)">
+            <button class="toggle-pw" type="button" onclick="togglePw('r-pw',this)"><i class="fa-regular fa-eye"></i></button>
+          </div>
+          <div class="pw-strength" id="pw-bars">
+            <div class="pw-bar" id="b1"></div>
+            <div class="pw-bar" id="b2"></div>
+            <div class="pw-bar" id="b3"></div>
+            <div class="pw-bar" id="b4"></div>
+          </div>
+          <span class="field-note" id="pw-note"></span>
+        </div>
+
+        <div class="fg au d3">
+          <label>Confirmar Senha *</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock icon-left"></i>
+            <input type="password" id="r-pw2" placeholder="Repita sua senha" oninput="checkMatch()">
+            <button class="toggle-pw" type="button" onclick="togglePw('r-pw2',this)"><i class="fa-regular fa-eye"></i></button>
+          </div>
+          <span class="field-note" id="pw2-note"></span>
+        </div>
+
+        <!-- ── ENDEREÇO ── -->
+        <div class="section-label"><i class="fa-solid fa-location-dot"></i> Endereço de Entrega</div>
+
+        <!-- CEP -->
+        <div class="fg au d1">
+          <label>CEP *</label>
+          <div class="cep-row input-wrap" style="flex-direction:row;padding:0;background:transparent;border:none;box-shadow:none;">
+            <div class="input-wrap" style="flex:1">
+              <i class="fa-solid fa-map-pin icon-left"></i>
+              <input type="text" id="r-cep" placeholder="00000-000" maxlength="9" oninput="maskCEP(this)" style="border-radius:var(--r)">
+            </div>
+            <button class="cep-btn" id="cepBtn" onclick="buscarCEP()" type="button">
+              <i class="fa-solid fa-magnifying-glass"></i> Buscar
+            </button>
+          </div>
+          <span class="field-note" id="cep-note"></span>
+        </div>
+
+        <div class="form-row">
+          <div class="fg au d2" style="flex:3">
+            <label>Logradouro *</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-road icon-left"></i>
+              <input type="text" id="r-street" placeholder="Rua, Av., etc.">
+            </div>
+          </div>
+          <div class="fg au d2" style="flex:1">
+            <label>Número *</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-hashtag icon-left"></i>
+              <input type="text" id="r-num" placeholder="123">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="fg au d3">
+            <label>Complemento</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-building icon-left"></i>
+              <input type="text" id="r-comp" placeholder="Apto, Bloco, etc.">
+            </div>
+          </div>
+          <div class="fg au d3">
+            <label>Bairro *</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-map icon-left"></i>
+              <input type="text" id="r-neigh" placeholder="Seu bairro">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="fg au d4" style="flex:2">
+            <label>Cidade *</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-city icon-left"></i>
+              <input type="text" id="r-city" placeholder="Sua cidade">
+            </div>
+          </div>
+          <div class="fg au d4" style="flex:1">
+            <label>Estado *</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-flag icon-left"></i>
+              <select id="r-state">
+                <option value="">UF</option>
+                <option>AC</option><option>AL</option><option>AP</option><option>AM</option>
+                <option>BA</option><option>CE</option><option>DF</option><option>ES</option>
+                <option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+                <option>MG</option><option>PA</option><option>PB</option><option>PR</option>
+                <option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+                <option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+                <option selected>SP</option><option>SE</option><option>TO</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── TERMOS ── -->
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;margin-top:4px">
+          <label class="check-row au d1">
+            <input type="checkbox" id="r-terms">
+            <span>Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a> *</span>
+          </label>
+          <label class="check-row au d2">
+            <input type="checkbox" id="r-news">
+            <span>Quero receber ofertas e novidades por e-mail e WhatsApp</span>
+          </label>
+        </div>
+
+        <button class="submit-btn au d3" onclick="doRegister()">
+          <i class="fa-solid fa-user-plus"></i> Criar minha conta
+        </button>
+
+        <!-- Success -->
+        <div class="success-state" id="register-success">
+          <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <h3>Conta criada com sucesso!</h3>
+          <p>Bem-vindo à Drogas Lícitas! Verifique seu e-mail para ativar a conta.</p>
+          <a href="index.html" class="submit-btn" style="text-decoration:none;margin-top:8px">
+            <i class="fa-solid fa-house"></i> Ir para o site
+          </a>
+        </div>
+
+        <p style="text-align:center;margin-top:18px;font-size:13px;color:var(--muted)">
+          Já tem conta? <a href="#" style="color:var(--blue);font-weight:700" onclick="switchTab('login')">Entrar agora</a>
+        </p>
+      </div>
+
+    </div><!-- /auth-card -->
+  </div><!-- /auth-right -->
+</div><!-- /auth-wrap -->
+
+<script src="../script/login01.js"></script>
+</body>
+</html>

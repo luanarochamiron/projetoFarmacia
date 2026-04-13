@@ -133,21 +133,64 @@ function switchTab(tab) {
 
   /* ── LOGIN ── */
   function doLogin() {
-    const email = document.getElementById('l-email').value.trim();
-    const pw    = document.getElementById('l-pw').value;
-    if (!email || !pw) { showToast('⚠️ Preencha e-mail e senha.','err'); return; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('❌ E-mail inválido.','err'); return; }
-    if (pw.length < 6) { showToast('❌ Senha muito curta.','err'); return; }
-    // simulate async login
+    const emailInput = document.getElementById('l-email').value.trim();
+    const pwInput    = document.getElementById('l-pw').value;
+
+    // 1. Validações básicas de preenchimento
+    if (!emailInput || !pwInput) {
+      showToast('⚠️ Preencha e-mail e senha.', 'err');
+      return;
+    }
+
+    // 2. Usuários fixos (funcionários)
+    const usuariosFixos = [
+      { email: "admin@farmaciailicita.com",     senha: "12345678", nome: "Admin",       role: "admin" },
+      { email: "caixa@farmaciailicita.com",      senha: "12345678", nome: "Caixa",       role: "caixa" },
+      { email: "balconista@farmaciailicita.com", senha: "12345678", nome: "Balconista",  role: "balconista" }
+    ];
+
+    // 3. Usuários cadastrados pelo formulário de registro (localStorage)
+    const usuariosSalvos = JSON.parse(localStorage.getItem('usuarios') || '[]');
+
+    // 4. Junta os dois e busca o usuário correspondente
+    const todos = [...usuariosFixos, ...usuariosSalvos];
+    const user  = todos.find(u => u.email === emailInput && u.senha === pwInput);
+
     const btn = document.querySelector('#form-login .submit-btn');
-    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Entrando...';
-    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Autenticando...';
+    btn.disabled  = true;
+
     setTimeout(() => {
+      if (!user) {
+        showToast('❌ Usuário ou senha inválidos!', 'err');
+        btn.innerHTML = 'Entrar';
+        btn.disabled  = false;
+        return;
+      }
+
+      // 5. Mapeamento de destinos por cargo
+      const paginas = {
+        admin:      "admin.html",
+        caixa:      "caixa.html",
+        balconista: "../balconista.html",
+        cliente:    "../index.html"
+      };
+
+      // 6. Sucesso e redirecionamento
       btn.style.display = 'none';
       document.getElementById('login-success').style.display = 'flex';
-      showToast('✅ Login realizado com sucesso!', 'ok');
-      setTimeout(() => { window.location.href = 'index.html'; }, 2000);
-    }, 1400);
+      
+      // Se user.role não existir, assumimos que é "cliente"
+      const cargo = user.role || 'cliente'; 
+      
+      showToast(`✅ Bem-vindo, ${user.nome || 'Cliente'}!`, 'ok');
+
+      setTimeout(() => {
+        // Agora usamos a variável 'cargo' que garantimos ter um valor válido
+        window.location.href = paginas[cargo] || 'index.html';
+      }, 1500);
+
+    }, 1000);
   }
 
   /* ── REGISTER ── */
@@ -166,24 +209,66 @@ function switchTab(tab) {
       ['r-neigh', 'Bairro'],
       ['r-city',  'Cidade'],
     ];
+
     for (const [id, lbl] of req) {
       if (!document.getElementById(id).value.trim()) {
         document.getElementById(id).focus();
-        showToast(`⚠️ Preencha o campo: ${lbl}`, 'err'); return;
+        showToast(`⚠️ Preencha o campo: ${lbl}`, 'err');
+        return;
       }
     }
+
     const cpfRaw = document.getElementById('r-cpf').value.replace(/\D/g,'');
     if (!checkCPF(cpfRaw)) { showToast('❌ CPF inválido.','err'); return; }
+
     const pw  = document.getElementById('r-pw').value;
     const pw2 = document.getElementById('r-pw2').value;
-    if (pw !== pw2) { showToast('❌ As senhas não conferem.','err'); return; }
-    if (pw.length < 8) { showToast('❌ Senha deve ter ao menos 8 caracteres.','err'); return; }
-    if (!document.getElementById('r-terms').checked) { showToast('⚠️ Aceite os Termos de Uso para continuar.','err'); return; }
-    // simulate async register
+    if (pw !== pw2)      { showToast('❌ As senhas não conferem.','err'); return; }
+    if (pw.length < 8)   { showToast('❌ Senha deve ter ao menos 8 caracteres.','err'); return; }
+
+    if (!document.getElementById('r-terms').checked) {
+      showToast('⚠️ Aceite os Termos de Uso para continuar.','err');
+      return;
+    }
+
+    const emailNovo = document.getElementById('r-email').value.trim();
+
+    // Verifica e-mail duplicado
+    const usuariosSalvos = JSON.parse(localStorage.getItem('usuarios') || '[]');
+    if (usuariosSalvos.find(u => u.email === emailNovo)) {
+      showToast('❌ Este e-mail já está cadastrado.', 'err');
+      return;
+    }
+
+    // Monta o objeto do novo usuário
+    const novoUsuario = {
+      nome:     document.getElementById('r-name').value.trim(),
+      cpf:      cpfRaw,
+      nascimento: document.getElementById('r-birth').value.trim(),
+      telefone: document.getElementById('r-phone').value.trim(),
+      email:    emailNovo,
+      senha:    pw,
+      role:     'cliente',
+      endereco: {
+        cep:    document.getElementById('r-cep').value.trim(),
+        rua:    document.getElementById('r-street').value.trim(),
+        numero: document.getElementById('r-num').value.trim(),
+        bairro: document.getElementById('r-neigh').value.trim(),
+        cidade: document.getElementById('r-city').value.trim(),
+        estado: document.getElementById('r-state').value.trim(),
+      }
+    };
+
+    // Simula cadastro assíncrono
     const btn = document.querySelector('#form-register .submit-btn');
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando conta...';
-    btn.disabled = true;
+    btn.disabled  = true;
+
     setTimeout(() => {
+      // Salva no localStorage
+      usuariosSalvos.push(novoUsuario);
+      localStorage.setItem('usuarios', JSON.stringify(usuariosSalvos));
+
       btn.style.display = 'none';
       document.getElementById('register-success').style.display = 'flex';
       showToast('🎉 Conta criada! Bem-vindo à Drogas Lícitas!', 'ok');
@@ -193,14 +278,18 @@ function switchTab(tab) {
   /* ── GOOGLE LOGIN ── */
   function loginGoogle() {
     showToast('🔄 Redirecionando para o Google...', 'ok');
-    // In production: window.location.href = '/auth/google'
+    // Em produção: window.location.href = '/auth/google'
   }
 
   /* ── FORGOT PW ── */
   function forgotPw(e) {
     e.preventDefault();
     const email = document.getElementById('l-email').value.trim();
-    if (!email) { showToast('⚠️ Informe seu e-mail primeiro.','err'); document.getElementById('l-email').focus(); return; }
+    if (!email) {
+      showToast('⚠️ Informe seu e-mail primeiro.','err');
+      document.getElementById('l-email').focus();
+      return;
+    }
     showToast(`✅ Link de recuperação enviado para ${email}`, 'ok');
   }
 
@@ -218,7 +307,7 @@ function switchTab(tab) {
     toastT = setTimeout(() => t.classList.remove('show'), 3000);
   }
 
-  /* ── CEP on Enter ── */
+  /* ── CEP on Enter / Login on Enter ── */
   document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('r-cep').addEventListener('keydown', e => {
       if (e.key === 'Enter') buscarCEP();

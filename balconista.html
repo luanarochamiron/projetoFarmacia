@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/balconista.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo-wrap">
+      <div class="logo">
+        <div class="logo-dot"></div>
+        <div>
+          Drogas Ilícitas
+          <small>Balcão 1</small>
+        </div>
+      </div>
+    </div>
+    <nav>
+      <div class="nav-label">Principal</div>
+      <button class="nav-btn active" onclick="navTo('dashboard', this)">
+        <span class="icon">📊</span><span>Dashboard</span>
+      </button>
+      <button class="nav-btn" onclick="navTo('clientes', this)">
+        <span class="icon">👤</span><span>Clientes</span>
+      </button>
+      <button class="nav-btn" onclick="navTo('produtos', this)">
+        <span class="icon">💊</span><span>Produtos / Estoque</span>
+        <span class="nav-badge" id="badge-low">3</span>
+      </button>
+      <div class="nav-label">Serviços</div>
+      <button class="nav-btn" onclick="navTo('orcamento', this)">
+        <span class="icon">🧾</span><span>Orçamento</span>
+      </button>
+      <button class="nav-btn" onclick="navTo('receitas', this)">
+        <span class="icon">📋</span><span>Receitas Médicas</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="user-avatar">B</div>
+        <div>
+          <div class="user-name">Balconista</div>
+          <div class="user-role">FARMÁCIA</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+ 
+  <!-- MAIN -->
+  <main class="main">
+    <!-- HEADER -->
+    <div class="page-header">
+      <div>
+        <div class="page-title" id="page-title">Bem-vindo ao <span>Drogas Ilícitas</span></div>
+        <div class="page-sub" id="page-sub">Visão geral do dia</div>
+      </div>
+      <div class="header-time">
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="date-str" id="date-str"></div>
+      </div>
+    </div>
+ 
+    <!-- TOAST -->
+    <div class="toast-wrap" id="toast-wrap"></div>
+ 
+    <!-- ===================== DASHBOARD ===================== -->
+    <div class="page active" id="page-dashboard">
+      <div class="stats-row">
+        <div class="stat-card" style="--c: var(--accent)">
+          <div class="stat-label">Clientes</div>
+          <div class="stat-value" id="stat-clientes">0</div>
+          <div class="stat-sub">Cadastrados</div>
+          <div class="stat-icon">👤</div>
+        </div>
+        <div class="stat-card" style="--c: var(--accent2)">
+          <div class="stat-label">Produtos</div>
+          <div class="stat-value" id="stat-produtos">0</div>
+          <div class="stat-sub">No estoque</div>
+          <div class="stat-icon">💊</div>
+        </div>
+        <div class="stat-card" style="--c: var(--warning)">
+          <div class="stat-label">Estoque Baixo</div>
+          <div class="stat-value" id="stat-baixo">0</div>
+          <div class="stat-sub">Requer atenção</div>
+          <div class="stat-icon">⚠️</div>
+        </div>
+        <div class="stat-card" style="--c: var(--accent2)">
+          <div class="stat-label">Receitas</div>
+          <div class="stat-value" id="stat-receitas">0</div>
+          <div class="stat-sub">Registradas</div>
+          <div class="stat-icon">📋</div>
+        </div>
+      </div>
+ 
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><div class="dot"></div>Alertas de Estoque</div>
+        </div>
+        <div id="alerta-estoque"><p style="color:var(--muted);font-size:.85rem">Nenhum alerta no momento.</p></div>
+      </div>
+ 
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><div class="dot"></div>Últimos Clientes</div>
+        </div>
+        <div id="ultimos-clientes"><p style="color:var(--muted);font-size:.85rem">Nenhum cliente cadastrado ainda.</p></div>
+      </div>
+    </div>
+ 
+    <!-- ===================== CLIENTES ===================== -->
+    <div class="page" id="page-clientes">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><div class="dot"></div>Cadastrar Novo Cliente</div>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Nome Completo *</label>
+            <input type="text" id="cli-nome" placeholder="Ex: Maria Silva">
+          </div>
+          <div class="field">
+            <label>CPF</label>
+            <input type="text" id="cli-cpf" placeholder="000.000.000-00" maxlength="14">
+          </div>
+          <div class="field">
+            <label>Data de Nascimento</label>
+            <input type="date" id="cli-nasc">
+          </div>
+          <div class="field">
+            <label>Telefone</label>
+            <input type="text" id="cli-tel" placeholder="(11) 99999-0000">
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="cli-email" placeholder="email@exemplo.com">
+          </div>
+          <div class="field">
+            <label>Convênio / Plano</label>
+            <input type="text" id="cli-convenio" placeholder="Ex: Bradesco Saúde">
+          </div>
+        </div>
+        <div class="form-grid" style="margin-top:14px">
+          <div class="field">
+            <label>Endereço</label>
+            <input type="text" id="cli-end" placeholder="Rua, número, bairro">
+          </div>
+          <div class="field">
+            <label>Observações</label>
+            <input type="text" id="cli-obs" placeholder="Alergias, preferências...">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="limparFormCliente()">↺ Limpar</button>
+          <button class="btn btn-primary" onclick="salvarCliente()">✓ Salvar Cliente</button>
+        </div>
+      </div>
+ 
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><div class="dot"></div>Clientes Cadastrados</div>
+          <div class="search-wrap" style="width:260px">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Buscar cliente..." oninput="buscarCliente(this.value)">
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Nome</th><th>CPF</th><th>Telefone</th><th>Convênio</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="tabela-clientes">
+            <tr><td colspan="5" style="color:var(--muted);text-align:center;padding:24px">Nenhum cliente cadastrado.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+ 
+    <!-- ===================== PRODUTOS ===================== -->
+    <div class="page" id="page-produtos">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><div class="dot"></div>Consultar / Adicionar Produto</div>
+        </div>
+        <div class="form-grid three">
+          <div class="field">
+            <label>Nome do Produto *</label>
+            <input type="text" id="prod-nome" placeholder="Ex: Dipirona 500mg">
+          </div>
+          <div class="field">
+            <label>Categoria</label>
+            <select id="prod-cat">
+              <option value="Analgésico">Analgésico</option>
+              <option value="Antibiótico">Antibiótico</option>
+              <option value="Anti-inflamatório">Anti-inflamatório</option>
+              <option value="Vitamina">Vitamina / Suplemento</option>
+              <option value="Uso Tópico">Uso Tópico</option>
+              <option value="Controlado">Controlado</option>
+              <option value="Outro">Outro</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Tipo</label>
+            <select id="prod-tipo">
+              <option value="Livre">Venda Livre</option>
+              <option value="Receita">Receita Simples</option>
+              <option value="Controlado">Controlado</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Preço (R$) *</label>
+            <input type="number" id="prod-preco" placeholder="0.00" step="0.01" min="0">
+          </div>
+          <div class="field">
+            <label>Quantidade em Estoque *</label>
+            <input type="number" id="prod-qty" placeholder="0" min="0">
+          </div>
+          <div class="field">
+            <label>Estoque Mínimo</label>
+            <input type="number" id="prod-min" placeholder="10" min="0">
+          </div>
+          <div class="field">
+            <label>Fabricante</label>
+            <input type="text" id="prod-fab" placeholder="Ex: EMS, Medley...">
+          </div>
+          <div class="field">
+            <label>Validade</label>
+            <input type="date" id="prod-val">
+          </div>
+          <div class="field">
+            <label>Código de Barras</label>
+            <input type="text" id="prod-cod" placeholder="EAN13">
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="limparFormProd()">↺ Limpar</button>
+          <button class="btn btn-primary" onclick="salvarProduto()">✓ Adicionar Produto</button>
+        </div>
+      </div>
+ 
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><div class="dot"></div>Estoque</div>
+          <div class="search-wrap" style="width:260px">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Buscar produto..." oninput="buscarProduto(this.value)">
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Produto</th><th>Categoria</th><th>Tipo</th><th>Preço</th><th>Estoque</th><th>Status</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="tabela-produtos">
+            <tr><td colspan="7" style="color:var(--muted);text-align:center;padding:24px">Nenhum produto cadastrado.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+ 
+    <!-- ===================== ORÇAMENTO ===================== -->
+    <div class="page" id="page-orcamento">
+      <div style="display:grid; grid-template-columns:1fr 380px; gap:20px">
+        <div>
+          <div class="section">
+            <div class="section-header">
+              <div class="section-title"><div class="dot"></div>Novo Orçamento</div>
+            </div>
+            <div class="field" style="margin-bottom:14px">
+              <label>Cliente (opcional)</label>
+              <select id="orc-cliente">
+                <option value="">— Selecione ou deixe em branco —</option>
+              </select>
+            </div>
+            <div class="search-wrap" style="margin-bottom:14px">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="orc-busca" placeholder="Buscar produto para adicionar..." oninput="filtrarOrcamento(this.value)">
+            </div>
+            <div id="orc-resultados" style="display:none">
+              <table>
+                <thead><tr><th>Produto</th><th>Preço</th><th>Estoque</th><th></th></tr></thead>
+                <tbody id="orc-lista-prod"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+ 
+        <div>
+          <div class="section" style="position:sticky;top:20px">
+            <div class="section-title" style="margin-bottom:16px"><div class="dot"></div>Carrinho</div>
+            <div id="orc-carrinho"><p style="color:var(--muted);font-size:.85rem;text-align:center;padding:20px">Adicione produtos ao orçamento.</p></div>
+            <div class="orc-total" id="orc-total-wrap" style="display:none">
+              <span class="orc-total-label">Total</span>
+              <span class="orc-total-val" id="orc-total">R$ 0,00</span>
+            </div>
+            <div class="btn-row" style="margin-top:16px">
+              <button class="btn btn-secondary btn-sm" onclick="limparCarrinho()">↺ Limpar</button>
+              <button class="btn btn-primary btn-sm" onclick="finalizarOrcamento()">✓ Finalizar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- ===================== RECEITAS ===================== -->
+    <div class="page" id="page-receitas">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><div class="dot"></div>Registrar Receita Médica</div>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Cliente *</label>
+            <select id="rx-cliente">
+              <option value="">— Selecione —</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Data da Prescrição</label>
+            <input type="date" id="rx-data">
+          </div>
+          <div class="field">
+            <label>Médico Prescritor</label>
+            <input type="text" id="rx-medico" placeholder="Dr. Nome Sobrenome">
+          </div>
+          <div class="field">
+            <label>CRM do Médico</label>
+            <input type="text" id="rx-crm" placeholder="CRM/SP 000000">
+          </div>
+          <div class="field">
+            <label>Tipo de Receita</label>
+            <select id="rx-tipo">
+              <option value="Simples">Receita Simples</option>
+              <option value="Especial">Receita Especial (Branca)</option>
+              <option value="Azul">Receituário Azul (C2)</option>
+              <option value="Amarelo">Receituário Amarelo (A/B)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Número da Receita / Protocolo</label>
+            <input type="text" id="rx-num" placeholder="Ex: RX-2024-0001">
+          </div>
+        </div>
+        <div class="field" style="margin-top:14px">
+          <label>Medicamentos Prescritos</label>
+          <textarea id="rx-meds" placeholder="Liste os medicamentos prescritos, dosagem e posologia..."></textarea>
+        </div>
+        <div class="field" style="margin-top:14px">
+          <label>Observações</label>
+          <textarea id="rx-obs" placeholder="Observações adicionais da receita..."></textarea>
+        </div>
+        <div class="field" style="margin-top:14px">
+          <label>Arquivo da Receita (foto/PDF)</label>
+          <div class="rx-upload" onclick="document.getElementById('rx-file').click()">
+            <div class="rx-upload-icon">📎</div>
+            <p>Clique para anexar a imagem ou PDF da receita</p>
+            <div id="rx-file-nome" style="display:none" class="rx-badge">📄 <span id="rx-fn-text"></span></div>
+          </div>
+          <input type="file" id="rx-file" style="display:none" accept="image/*,.pdf" onchange="nomeArquivo(this)">
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="limparReceita()">↺ Limpar</button>
+          <button class="btn btn-primary" onclick="salvarReceita()">✓ Registrar Receita</button>
+        </div>
+      </div>
+ 
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title"><div class="dot"></div>Receitas Registradas</div>
+          <div class="search-wrap" style="width:260px">
+            <span class="search-icon">🔍</span>
+            <input type="text" placeholder="Buscar receita..." oninput="buscarReceita(this.value)">
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Cliente</th><th>Médico</th><th>Data</th><th>Tipo</th><th>Medicamentos</th><th>Ações</th></tr>
+          </thead>
+          <tbody id="tabela-receitas">
+            <tr><td colspan="6" style="color:var(--muted);text-align:center;padding:24px">Nenhuma receita registrada.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+ 
+  </main>
+</div>
+ 
+<!-- MODAL VER CLIENTE -->
+<div class="modal-bg" id="modal-cliente" style="display:none">
+  <div class="modal">
+    <div class="modal-title">👤 Dados do Cliente</div>
+    <div id="modal-cli-body"></div>
+    <div class="btn-row"><button class="btn btn-secondary" onclick="fecharModal('modal-cliente')">Fechar</button></div>
+  </div>
+</div>
+ 
+<!-- MODAL VER PRODUTO -->
+<div class="modal-bg" id="modal-produto" style="display:none">
+  <div class="modal">
+    <div class="modal-title">💊 Detalhes do Produto</div>
+    <div id="modal-prod-body"></div>
+    <div class="btn-row"><button class="btn btn-secondary" onclick="fecharModal('modal-produto')">Fechar</button></div>
+  </div>
+</div>
+
+  <script src="./script/balconista.js"></script>
+</body>
+</html>

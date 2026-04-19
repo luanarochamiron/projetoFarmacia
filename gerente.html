@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drogas Ilicitas — Gerente</title>
+<link href="./css/gerente.css" rel="stylesheet">
+<style>
+
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-top">
+    <div class="logo">
+      <div class="logo-mark">💊</div>
+      <div>
+        <div class="logo-text">Drogas Ilicitas</div>
+        <div class="logo-sub">Gestão</div>
+      </div>
+    </div>
+    <div class="role-chip"><div class="role-dot"></div>GERENTE</div>
+  </div>
+  <nav>
+    <div class="nav-group">Visão Geral</div>
+    <button class="nav-btn active" onclick="ir('dashboard',this)"><span class="nv-ico">📊</span><span>Dashboard</span></button>
+    <button class="nav-btn" onclick="ir('vendas',this)"><span class="nv-ico">💰</span><span>Relatório de Vendas</span></button>
+
+    <div class="nav-group">Operações</div>
+    <button class="nav-btn" onclick="ir('estoque',this)">
+      <span class="nv-ico">📦</span><span>Gestão de Estoque</span>
+      <span class="nv-badge yellow" id="nb-pend">0</span>
+    </button>
+
+    <div class="nav-group">Pessoas</div>
+    <button class="nav-btn" onclick="ir('equipe',this)"><span class="nv-ico">👥</span><span>Gestão de Equipe</span></button>
+  </nav>
+  <div class="sb-foot">
+    <div class="ger-chip">
+      <div class="ger-av">G</div>
+      <div><div class="ger-name">Gerente</div><div class="ger-role"></div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="ph">
+      <span class="ph-icon" id="ph-ico">📊</span>
+      <div>
+        <div class="ph-title" id="ph-title">Dashboard Gerencial</div>
+        <div class="ph-sub" id="ph-sub">Visão consolidada da farmácia</div>
+      </div>
+    </div>
+    <div class="tb-right">
+      <div>
+        <div class="tb-clock" id="tb-clock">00:00:00</div>
+        <div class="tb-date" id="tb-date"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══ DASHBOARD ═══ -->
+    <div class="page active" id="page-dashboard">
+      <div class="stat-row s4">
+        <div class="stat-card" style="--c:var(--accent)">
+          <div class="sc-lbl">Vendas Hoje</div>
+          <div class="sc-val td-g" id="sd-hoje">R$ 0</div>
+          <div class="sc-sub"><span class="sc-up">↑</span><span id="sd-hoje-n">0 transações</span></div>
+          <div class="sc-ico">💰</div>
+        </div>
+        <div class="stat-card" style="--c:var(--a2)">
+          <div class="sc-lbl">Esta Semana</div>
+          <div class="sc-val" id="sd-sem">R$ 0</div>
+          <div class="sc-sub"><span id="sd-sem-n" style="color:var(--muted2)">0 transações</span></div>
+          <div class="sc-ico">📅</div>
+        </div>
+        <div class="stat-card" style="--c:var(--a4)">
+          <div class="sc-lbl">Este Mês</div>
+          <div class="sc-val" id="sd-mes">R$ 0</div>
+          <div class="sc-sub"><span id="sd-mes-pct" class="sc-trend trend-up">carregando</span></div>
+          <div class="sc-ico">📆</div>
+        </div>
+        <div class="stat-card" style="--c:var(--a5)">
+          <div class="sc-lbl">Este Ano</div>
+          <div class="sc-val" id="sd-ano">R$ 0</div>
+          <div class="sc-sub"><span id="sd-ano-n" style="color:var(--muted2)">acumulado</span></div>
+          <div class="sc-ico">📈</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:18px;">
+        <!-- CHART -->
+        <div class="sec">
+          <div class="sec-head">
+            <div class="sec-title"><div class="dot dot-g"></div>Vendas por Dia (últimos 7 dias)</div>
+          </div>
+          <div class="sec-body">
+            <div style="display:flex;gap:0;">
+              <div class="chart-yaxis" id="chart-y"></div>
+              <div style="flex:1;"><div class="chart-bars" id="chart-bars"></div></div>
+            </div>
+          </div>
+        </div>
+        <!-- META -->
+        <div class="sec">
+          <div class="sec-head"><div class="sec-title"><div class="dot dot-y"></div>Meta Mensal</div></div>
+          <div class="sec-body">
+            <div class="meta-ring-wrap">
+              <div class="meta-ring">
+                <svg width="100" height="100" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="40" fill="none" stroke="var(--surface3)" stroke-width="8"/>
+                  <circle id="meta-circle" cx="50" cy="50" r="40" fill="none" stroke="var(--accent)" stroke-width="8"
+                    stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="251" style="transition:stroke-dashoffset 1s ease"/>
+                </svg>
+                <div class="meta-ring-val" id="meta-pct">0%</div>
+              </div>
+              <div class="meta-info">
+                <div class="meta-lbl">Realizado</div>
+                <div class="meta-val" id="meta-real">R$ 0</div>
+                <div class="meta-sub">Meta: <span id="meta-goal">R$ 30.000</span></div>
+                <div style="margin-top:8px;font-size:.75rem;color:var(--muted2)">Faltam <strong id="meta-falt" style="color:var(--accent)">R$ 0</strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+        <!-- TOP PRODUTOS -->
+        <div class="sec">
+          <div class="sec-head"><div class="sec-title"><div class="dot dot-o"></div>Top Produtos</div></div>
+          <div class="sec-body">
+            <div class="prog-wrap" id="top-prods"></div>
+          </div>
+        </div>
+        <!-- PENDÊNCIAS -->
+        <div class="sec">
+          <div class="sec-head">
+            <div class="sec-title"><div class="dot dot-y"></div>Pendências de Estoque</div>
+            <button class="btn btn-sm btn-sec" onclick="ir('estoque',document.querySelectorAll('.nav-btn')[2])">Ver todas →</button>
+          </div>
+          <div id="dash-pend"><div style="padding:20px;color:var(--muted2);font-size:.84rem;text-align:center">Nenhuma pendência.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ VENDAS ═══ -->
+    <div class="page" id="page-vendas">
+      <!-- PERÍODO -->
+      <div class="sec" style="margin-bottom:18px;">
+        <div class="sec-body" style="padding:14px 20px;">
+          <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+            <div class="period-tabs">
+              <button class="ptab active" onclick="setPeriod('dia',this)">Hoje</button>
+              <button class="ptab" onclick="setPeriod('semana',this)">Semana</button>
+              <button class="ptab" onclick="setPeriod('mes',this)">Mês</button>
+              <button class="ptab" onclick="setPeriod('ano',this)">Ano</button>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <input type="date" id="v-de" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:.82rem;outline:none;">
+              <span style="color:var(--muted2);font-size:.82rem;">até</span>
+              <input type="date" id="v-ate" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:.82rem;outline:none;">
+              <button class="btn btn-sm btn-sec" onclick="renderVendas()">Filtrar</button>
+            </div>
+            <button class="btn btn-sm btn-sec" style="margin-left:auto;" onclick="exportarCSV()">⬇ Exportar CSV</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESUMO PERÍODO -->
+      <div class="stat-row s4" id="v-stats" style="margin-bottom:18px;"></div>
+
+      <!-- GRÁFICO PERÍODO -->
+      <div class="sec" style="margin-bottom:18px;">
+        <div class="sec-head">
+          <div class="sec-title"><div class="dot dot-g"></div>Evolução de Vendas</div>
+          <span id="v-period-lbl" style="font-size:.75rem;color:var(--muted2);font-family:'DM Mono',monospace;">Hoje</span>
+        </div>
+        <div class="sec-body">
+          <div style="display:flex;gap:0;">
+            <div class="chart-yaxis" id="v-chart-y"></div>
+            <div style="flex:1;"><div class="chart-bars" id="v-chart-bars"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMAS DE PAGAMENTO -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px;">
+        <div class="sec">
+          <div class="sec-head"><div class="sec-title"><div class="dot dot-b"></div>Por Forma de Pagamento</div></div>
+          <div class="sec-body"><div class="prog-wrap" id="v-pagamentos"></div></div>
+        </div>
+        <div class="sec">
+          <div class="sec-head"><div class="sec-title"><div class="dot dot-p"></div>Por Categoria de Produto</div></div>
+          <div class="sec-body"><div class="prog-wrap" id="v-categorias"></div></div>
+        </div>
+      </div>
+
+      <!-- TABELA TRANSAÇÕES -->
+      <div class="sec">
+        <div class="sec-head">
+          <div class="sec-title"><div class="dot dot-g"></div>Transações do Período</div>
+          <span id="v-count-lbl" style="font-size:.75rem;color:var(--muted2);font-family:'DM Mono',monospace;"></span>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Nº</th><th>Data/Hora</th><th>Cliente</th><th>Operador</th><th>Itens</th><th>Pagamento</th><th>Desconto</th><th>Total</th></tr></thead>
+            <tbody id="v-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ESTOQUE ═══ -->
+    <div class="page" id="page-estoque">
+      <div class="stat-row s3" style="margin-bottom:18px;">
+        <div class="stat-card" style="--c:var(--accent)">
+          <div class="sc-lbl">Total de SKUs</div>
+          <div class="sc-val" id="es-total">0</div>
+          <div class="sc-sub">Produtos cadastrados</div>
+          <div class="sc-ico">💊</div>
+        </div>
+        <div class="stat-card" style="--c:var(--warn)">
+          <div class="sc-lbl">Estoque Baixo</div>
+          <div class="sc-val" id="es-low">0</div>
+          <div class="sc-sub">Abaixo do mínimo</div>
+          <div class="sc-ico">⚠️</div>
+        </div>
+        <div class="stat-card" style="--c:var(--danger)">
+          <div class="sc-lbl">Sem Estoque</div>
+          <div class="sc-val" id="es-out">0</div>
+          <div class="sc-sub">Necessita reposição urgente</div>
+          <div class="sc-ico">🚨</div>
+        </div>
+      </div>
+
+      <!-- PENDENTES APROVAÇÃO -->
+      <div class="sec" style="margin-bottom:18px;">
+        <div class="sec-head">
+          <div class="sec-title"><div class="dot dot-y"></div>Entradas Aguardando Aprovação
+            <span class="badge b-pend" id="pend-count-badge">0</span>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-sm btn-sec" onclick="aprovarTodos()">✓ Aprovar Todos</button>
+          </div>
+        </div>
+        <div id="pend-list"><div style="padding:24px;text-align:center;color:var(--muted2);font-size:.84rem;">✅ Nenhuma entrada pendente.</div></div>
+      </div>
+
+      <!-- ESTOQUE ATUAL -->
+      <div class="sec">
+        <div class="sec-head">
+          <div class="sec-title"><div class="dot dot-g"></div>Estoque Atual</div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <input type="text" id="es-search" placeholder="Buscar produto..." oninput="renderEstoque()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:.82rem;outline:none;width:200px;">
+            <select id="es-filter" onchange="renderEstoque()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:.82rem;outline:none;">
+              <option value="">Todos</option>
+              <option value="ok">OK</option>
+              <option value="low">Baixo</option>
+              <option value="out">Sem estoque</option>
+            </select>
+            <button class="btn btn-sm btn-primary" onclick="abrirModalEntrada()">+ Registrar Entrada</button>
+          </div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Produto</th><th>Fabricante</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Mín.</th><th>Validade</th><th>Status</th><th>Ações</th></tr></thead>
+            <tbody id="es-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ EQUIPE ═══ -->
+    <div class="page" id="page-equipe">
+      <div class="stat-row s4" style="margin-bottom:18px;">
+        <div class="stat-card" style="--c:var(--accent)">
+          <div class="sc-lbl">Total Funcionários</div>
+          <div class="sc-val" id="eq-total">0</div>
+          <div class="sc-sub">Na equipe</div>
+          <div class="sc-ico">👥</div>
+        </div>
+        <div class="stat-card" style="--c:var(--success)">
+          <div class="sc-lbl">Ativos</div>
+          <div class="sc-val" id="eq-ativos">0</div>
+          <div class="sc-sub">Em serviço</div>
+          <div class="sc-ico">✅</div>
+        </div>
+        <div class="stat-card" style="--c:var(--warn)">
+          <div class="sc-lbl">De Férias</div>
+          <div class="sc-val" id="eq-ferias">0</div>
+          <div class="sc-sub">Em afastamento</div>
+          <div class="sc-ico">🏖️</div>
+        </div>
+        <div class="stat-card" style="--c:var(--a5)">
+          <div class="sc-lbl">Cargos</div>
+          <div class="sc-val" id="eq-cargos">0</div>
+          <div class="sc-sub">Diferentes funções</div>
+          <div class="sc-ico">🏷️</div>
+        </div>
+      </div>
+
+      <div class="sec" style="margin-bottom:18px;">
+        <div class="sec-head">
+          <div class="sec-title"><div class="dot dot-b"></div>Funcionários</div>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <input type="text" id="eq-search" placeholder="Buscar funcionário..." oninput="renderEquipe()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--text);font-size:.82rem;outline:none;width:200px;">
+            <select id="eq-filter" onchange="renderEquipe()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:.82rem;outline:none;">
+              <option value="">Todos status</option>
+              <option value="Ativo">Ativo</option>
+              <option value="Férias">Férias</option>
+              <option value="Inativo">Inativo</option>
+            </select>
+            <button class="btn btn-sm btn-primary" onclick="abrirModalFunc()">+ Novo Funcionário</button>
+          </div>
+        </div>
+        <div class="sec-body" style="padding:0;">
+          <div class="func-grid" id="func-grid" style="padding:18px;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-wrap" id="toasts"></div>
+
+<!-- MODAL ENTRADA ESTOQUE -->
+<div class="modal-bg" id="modal-entrada" style="display:none;">
+  <div class="modal">
+    <div class="modal-title">📦 Registrar Entrada de Produto</div>
+    <div class="fg f2">
+      <div class="field sp2">
+        <label>Produto *</label>
+        <select id="en-prod"><option value="">— Selecione —</option></select>
+      </div>
+      <div class="field"><label>Quantidade Recebida *</label><input type="number" id="en-qty" min="1" placeholder="0"></div>
+      <div class="field"><label>Lote</label><input type="text" id="en-lote" placeholder="LOT-2025-001"></div>
+      <div class="field"><label>Data de Validade</label><input type="date" id="en-val"></div>
+      <div class="field"><label>Fornecedor</label><input type="text" id="en-forn" placeholder="Nome do fornecedor"></div>
+      <div class="field"><label>Nota Fiscal</label><input type="text" id="en-nf" placeholder="NF-e 000000"></div>
+      <div class="field sp2"><label>Observações</label><textarea id="en-obs" placeholder="Obs da entrada..."></textarea></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-sec" onclick="hide('modal-entrada')">Cancelar</button>
+      <button class="btn btn-primary" onclick="registrarEntrada()">✓ Registrar Entrada</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FUNC -->
+<div class="modal-bg" id="modal-func" style="display:none;">
+  <div class="modal">
+    <div class="modal-title" id="mf-title">👤 Novo Funcionário</div>
+    <input type="hidden" id="mf-id">
+    <div class="fg f2">
+      <div class="field sp2"><label>Nome Completo *</label><input type="text" id="mf-nome" placeholder="Nome Sobrenome"></div>
+      <div class="field"><label>CPF</label><input type="text" id="mf-cpf" placeholder="000.000.000-00" maxlength="14" oninput="fmtCPF(this)"></div>
+      <div class="field"><label>Data de Nascimento</label><input type="date" id="mf-nasc"></div>
+      <div class="field"><label>Telefone</label><input type="text" id="mf-tel" placeholder="(11) 99999-0000"></div>
+      <div class="field"><label>Email</label><input type="email" id="mf-email" placeholder="func@farma.com"></div>
+      <div class="field">
+        <label>Cargo *</label>
+        <select id="mf-cargo">
+          <option>Balconista</option><option>Caixa</option><option>Gerente</option>
+          <option>Farmacêutico</option><option>Estoquista</option><option>Auxiliar</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Status</label>
+        <select id="mf-status"><option>Ativo</option><option>Férias</option><option>Inativo</option></select>
+      </div>
+      <div class="field"><label>Data de Admissão</label><input type="date" id="mf-adm"></div>
+      <div class="field"><label>Salário (R$)</label><input type="number" id="mf-sal" placeholder="0,00" step="0.01"></div>
+      <div class="field"><label>Turno</label>
+        <select id="mf-turno"><option>Manhã</option><option>Tarde</option><option>Noite</option><option>Integral</option></select>
+      </div>
+      <div class="field sp2"><label>Observações</label><textarea id="mf-obs" placeholder="Notas sobre o funcionário..."></textarea></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-sec" onclick="hide('modal-func')">Cancelar</button>
+      <button class="btn btn-primary" onclick="salvarFunc()">✓ Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL AJUSTE ESTOQUE -->
+<div class="modal-bg" id="modal-ajuste" style="display:none;">
+  <div class="modal" style="max-width:380px;">
+    <div class="modal-title">⚖️ Ajustar Estoque</div>
+    <div class="fg">
+      <div class="field"><label>Produto</label><input type="text" id="aj-nome" disabled></div>
+      <div class="field"><label>Nova Quantidade</label><input type="number" id="aj-qty" min="0"></div>
+      <div class="field"><label>Motivo</label><select id="aj-motivo"><option>Inventário</option><option>Perda/Quebra</option><option>Vencimento</option><option>Devolução</option><option>Correção</option></select></div>
+      <div class="field"><label>Observação</label><input type="text" id="aj-obs" placeholder="Detalhe o ajuste..."></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-sec" onclick="hide('modal-ajuste')">Cancelar</button>
+      <button class="btn btn-warn" onclick="confirmarAjuste()">✓ Aplicar Ajuste</button>
+    </div>
+    <input type="hidden" id="aj-id">
+  </div>
+</div>
+<script src="./script/gerente.js"></script>
+</body>
+</html>

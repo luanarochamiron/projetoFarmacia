@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drogas Ilicitas — Caixa PDV</title>
+<link href="./css/caixa.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- TELA FECHADO - ABERTURA DE CAIXA -->
+<div id="tela-fechado">
+  <div class="abertura-card">
+    <div class="logo-big"><div class="logo-dot-big"></div>Drogas Ilicitas</div>
+    <div class="abertura-sub">PDV — Abertura de Caixa</div>
+    <div class="clock-big" id="ab-clock">00:00:00</div>
+    <div class="date-big" id="ab-date"></div>
+    <div class="abertura-field">
+      <label>Operador / Balconista</label>
+      <input type="text" id="ab-operador" placeholder="Seu nome" value="Balconista">
+    </div>
+    <div class="abertura-field">
+      <label>Fundo de Caixa Inicial (R$)</label>
+      <input type="number" id="ab-fundo" placeholder="0,00" value="200" step="0.01" min="0">
+    </div>
+    <button class="btn-abrir" onclick="abrirCaixa()">🟢 &nbsp;Abrir Caixa</button>
+  </div>
+</div>
+
+<!-- PDV PRINCIPAL -->
+<div class="pdv" id="pdv-main" style="display:none">
+
+  <!-- ESQUERDA -->
+  <div class="pdv-left">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-logo"><div class="topbar-logo-dot"></div>Drogas Ilicitas <span style="color:var(--muted);font-size:.75rem;font-weight:400;margin-left:4px">/ Caixa</span></div>
+      <div class="topbar-right">
+        <div class="caixa-info"><strong id="op-nome-top">—</strong>Caixa aberto</div>
+        <div class="clock-sm" id="pdv-clock">00:00:00</div>
+        <button class="btn-fechar-caixa" onclick="abrirFechamento()">⬛ Fechar Caixa</button>
+      </div>
+    </div>
+
+    <!-- CLIENTE -->
+    <div class="cliente-strip">
+      <div class="cli-icon">👤</div>
+      <div class="cli-input-wrap" id="cli-input-area">
+        <input type="text" id="cpf-input" placeholder="CPF do cliente (opcional)" maxlength="14" oninput="formatCPF(this)" onkeydown="if(event.key==='Enter')buscarCPF()">
+      </div>
+      <div id="cli-info-wrap" style="display:none;flex:1">
+        <div class="cli-info" id="cli-nome-show">—</div>
+        <small class="cli-info" id="cli-cpf-show">—</small>
+      </div>
+      <button class="cli-clear" onclick="limparCliente()" title="Limpar">✕</button>
+      <button style="background:var(--accent2);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:.8rem;cursor:pointer;font-weight:600;white-space:nowrap" onclick="buscarCPF()">Buscar</button>
+    </div>
+
+    <!-- SCANNER -->
+    <div class="scanner-wrap">
+      <div class="scanner-label">📡 &nbsp;Leitor de Código de Barras / Busca Manual</div>
+      <div class="scanner-row">
+        <input class="scanner-input" type="text" id="barcode-input" placeholder="Leia o código ou digite o nome..." autofocus
+          onkeydown="if(event.key==='Enter')scanItem()">
+        <button class="btn-scan" onclick="scanItem()">+ Adicionar</button>
+      </div>
+    </div>
+
+    <!-- ITENS -->
+    <div class="itens-wrap">
+      <div class="itens-header">
+        <div class="itens-title">🛒 Itens da Venda <span class="itens-count" id="itens-count">0</span></div>
+        <button style="background:none;border:none;color:var(--muted);font-size:.78rem;cursor:pointer" onclick="limparVenda()">🗑 Limpar tudo</button>
+      </div>
+      <div class="itens-body" id="itens-body">
+        <div class="itens-vazio">
+          <div class="vazio-icon">📦</div>
+          <span>Nenhum item adicionado</span>
+          <small style="font-size:.75rem">Use o leitor ou busca acima</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUPOM DESCONTO -->
+    <div class="cupom-row">
+      <span style="font-size:1rem">🏷️</span>
+      <input type="text" id="cupom-input" placeholder="CUPOM DE DESCONTO..." onkeydown="if(event.key==='Enter')aplicarCupom()">
+      <button class="btn-cupom" onclick="aplicarCupom()">Aplicar</button>
+      <div class="cupom-aplicado" id="cupom-ok" style="display:none">✓ <span id="cupom-desc-text"></span></div>
+      <button id="btn-rem-cupom" style="display:none;background:none;border:none;color:var(--danger);cursor:pointer;font-size:.9rem" onclick="removerCupom()">✕</button>
+    </div>
+  </div>
+
+  <!-- DIREITA -->
+  <div class="pdv-right">
+    <!-- TOTAIS -->
+    <div class="totais-card">
+      <div class="totais-row">
+        <span class="totais-label">Subtotal</span>
+        <span class="totais-val" id="val-subtotal">R$ 0,00</span>
+      </div>
+      <div class="totais-row" id="row-desconto" style="display:none">
+        <span class="totais-label">Desconto</span>
+        <span class="totais-val red" id="val-desconto">− R$ 0,00</span>
+      </div>
+      <div class="totais-row big">
+        <span class="total-label-big">TOTAL</span>
+        <span class="total-final" id="val-total">R$ 0,00</span>
+      </div>
+    </div>
+
+    <!-- PAGAMENTO -->
+    <div>
+      <div class="pag-title"><div class="pag-dot"></div>Forma de Pagamento</div>
+      <div class="pag-grid">
+        <div class="pag-btn pix-btn" onclick="selecionarPag('pix', this)">
+          <div class="pag-icon">🟢</div>
+          <div class="pag-name">PIX</div>
+        </div>
+        <div class="pag-btn dinheiro-btn" onclick="selecionarPag('dinheiro', this)">
+          <div class="pag-icon">💵</div>
+          <div class="pag-name">Dinheiro</div>
+        </div>
+        <div class="pag-btn debito-btn" onclick="selecionarPag('debito', this)">
+          <div class="pag-icon">💳</div>
+          <div class="pag-name">Débito</div>
+        </div>
+        <div class="pag-btn credito-btn" onclick="selecionarPag('credito', this)">
+          <div class="pag-icon">💳</div>
+          <div class="pag-name">Crédito</div>
+        </div>
+      </div>
+
+      <!-- PARCELAS (crédito) -->
+      <div class="parcelas-wrap" id="parcelas-wrap" style="display:none">
+        <div class="parcelas-label">Parcelamento</div>
+        <div class="parcelas-grid" id="parcelas-grid"></div>
+      </div>
+
+      <!-- PIX QR -->
+      <div class="pix-wrap" id="pix-wrap">
+        <div class="qr">⬛</div>
+        <div class="pix-key" id="pix-chave">farmacia@exemplo.com</div>
+        <div class="pix-label">Valor: <strong id="pix-valor" style="color:var(--pix)">R$ 0,00</strong></div>
+        <div style="font-size:.7rem;color:var(--muted);margin-top:6px;font-family:'DM Mono',monospace">Aguardando confirmação...</div>
+      </div>
+
+      <!-- TROCO (dinheiro) -->
+      <div class="troco-wrap" id="troco-wrap">
+        <div class="troco-field">
+          <label>Valor Recebido (R$)</label>
+          <input type="number" id="recebido-input" placeholder="0,00" step="0.01" min="0" oninput="calcTroco()">
+        </div>
+        <div class="troco-val" id="troco-val" style="display:none">Troco: <span id="troco-num">R$ 0,00</span></div>
+      </div>
+    </div>
+
+    <!-- FINALIZAR -->
+    <button class="btn-finalizar" id="btn-finalizar" onclick="finalizarVenda()" disabled>
+      ✓ &nbsp;Finalizar Venda
+    </button>
+    <button class="btn-cancelar" onclick="limparVenda()">✕ Cancelar Venda</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<!-- MODAL CUPOM FISCAL -->
+<div class="modal-bg" id="modal-cupom" style="display:none">
+  <div class="modal-cupom">
+    <div class="cupom-topo">
+      <h2>🧾 Drogas Ilicitas PDV</h2>
+      <p>CNPJ: 00.000.000/0001-00 &nbsp;|&nbsp; <span id="cupom-data-hora"></span></p>
+    </div>
+    <div class="cupom-body">
+      <div id="cupom-cliente-linha"></div>
+      <hr class="cupom-sep">
+      <div style="font-size:.68rem;color:var(--muted);margin-bottom:6px;letter-spacing:1px">ITEM &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QTD &nbsp;&nbsp; UNIT &nbsp;&nbsp; TOTAL</div>
+      <div id="cupom-itens"></div>
+      <hr class="cupom-sep">
+      <div id="cupom-totais"></div>
+      <hr class="cupom-sep">
+      <div class="cupom-linha"><span>PAGAMENTO</span><span id="cupom-pag">—</span></div>
+      <div id="cupom-troco-linha"></div>
+      <hr class="cupom-sep">
+      <div style="text-align:center;font-size:.68rem;color:var(--muted);letter-spacing:1px">Nº <span id="cupom-num"></span> &nbsp;|&nbsp; CUP FISCAL</div>
+    </div>
+    <div class="cupom-agradecimento">
+      <div class="emoji" id="cupom-emoji">🌙</div>
+      <p id="cupom-msg">Boa noite! Obrigado pela compra!</p>
+      <small id="cupom-sub">Volte sempre — Drogas Ilicitas</small>
+    </div>
+    <div class="cupom-btns">
+      <button class="btn-imprimir" onclick="imprimirCupom()">🖨️ Imprimir</button>
+      <button class="btn-nova-venda" onclick="novaVenda()">+ Nova Venda</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL FECHAMENTO -->
+<div class="modal-bg" id="modal-fechamento" style="display:none">
+  <div class="modal-fechamento">
+    <div class="fech-title">⬛ Fechamento de Caixa</div>
+    <div class="fech-grid">
+      <div class="fech-item"><div class="fech-label">Abertura</div><div class="fech-val" id="f-abertura">—</div></div>
+      <div class="fech-item"><div class="fech-label">Fechamento</div><div class="fech-val" id="f-fechamento">—</div></div>
+      <div class="fech-item"><div class="fech-label">Vendas Realizadas</div><div class="fech-val" id="f-vendas">0</div></div>
+      <div class="fech-item"><div class="fech-label">Total em Vendas</div><div class="fech-val" id="f-total">R$ 0,00</div></div>
+      <div class="fech-item"><div class="fech-label">Fundo Inicial</div><div class="fech-val" id="f-fundo">R$ 0,00</div></div>
+      <div class="fech-item"><div class="fech-label">Total Caixa</div><div class="fech-val" id="f-caixa">R$ 0,00</div></div>
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:6px">Observações</div>
+      <textarea class="fech-obs" id="fech-obs" placeholder="Observações do fechamento..."></textarea>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button style="flex:1;padding:12px;background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:10px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.87rem" onclick="fecharModal('modal-fechamento')">Cancelar</button>
+      <button style="flex:1;padding:12px;background:var(--danger);color:#fff;border:none;border-radius:10px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:.9rem" onclick="confirmarFechamento()">Confirmar Fechamento</button>
+    </div>
+  </div>
+</div>
+<script src="./script/caixa.js"></script>
+</body>
+</html>
